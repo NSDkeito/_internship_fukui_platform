@@ -16,7 +16,7 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 export const useNotifications = () => {
   const context = useContext(NotificationContext);
   if (!context) {
-    throw new Error('useNotifications must be used within a NotificationProvider');
+    throw new Error('NotificationProvider内でuseNotificationsを使用する必要があります');
   }
   return context;
 };
@@ -25,10 +25,10 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const { user } = useAuth();
 
-  // Calculate unread notifications count
+  // 未読通知の数を計算
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  // Load notifications from localStorage on mount
+  // マウント時にlocalStorageから通知を読み込む
   useEffect(() => {
     if (user) {
       const storedNotifications = localStorage.getItem(`notifications_${user.id}`);
@@ -40,7 +40,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
     }
   }, [user]);
 
-  // Save notifications to localStorage when they change
+  // 通知が変更されたときにlocalStorageに保存
   useEffect(() => {
     if (user) {
       localStorage.setItem(`notifications_${user.id}`, JSON.stringify(notifications));

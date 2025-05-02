@@ -14,7 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('AuthProvider内でuseAuthを使用する必要があります');
   }
   return context;
 };
@@ -28,7 +28,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   });
   const navigate = useNavigate();
 
-  // Check if user is already logged in
+  // ユーザーが既にログインしているか確認
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -48,12 +48,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           });
         }
       } catch (error) {
-        console.error('Authentication check failed:', error);
+        console.error('認証チェックに失敗しました:', error);
         setState({
           user: null,
           isAuthenticated: false,
           isLoading: false,
-          error: 'Failed to authenticate',
+          error: '認証に失敗しました',
         });
       }
     };
@@ -65,8 +65,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       setState({ ...state, isLoading: true, error: null });
       
-      // This would be an API call in a real application
-      // Simulating API response for demo purposes
+      // 実際のアプリケーションではAPI呼び出しになります
+      // デモ用のモックレスポンス
       const mockUser: User = {
         id: '123',
         email,
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updatedAt: new Date().toISOString(),
       };
       
-      // Store the user in localStorage for persistence
+      // 永続化のためにユーザーをlocalStorageに保存
       localStorage.setItem('user', JSON.stringify(mockUser));
       
       setState({
@@ -86,18 +86,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         error: null,
       });
 
-      // Redirect based on user type
+      // ユーザータイプに基づいてリダイレクト
       if (mockUser.userType === 'student') {
-        navigate('/student/dashboard');
+        navigate('/学生/ダッシュボード');
       } else if (mockUser.userType === 'company') {
-        navigate('/company/dashboard');
+        navigate('/企業/ダッシュボード');
       }
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('ログインに失敗しました:', error);
       setState({
         ...state,
         isLoading: false,
-        error: 'Invalid email or password',
+        error: 'メールアドレスまたはパスワードが正しくありません',
       });
     }
   };
@@ -106,8 +106,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       setState({ ...state, isLoading: true, error: null });
       
-      // This would be an API call in a real application
-      // Simulating API response for demo purposes
+      // 実際のアプリケーションではAPI呼び出しになります
+      // デモ用のモックレスポンス
       const mockUser: User = {
         id: '123',
         email,
@@ -117,7 +117,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updatedAt: new Date().toISOString(),
       };
       
-      // Store the user in localStorage for persistence
+      // 永続化のためにユーザーをlocalStorageに保存
       localStorage.setItem('user', JSON.stringify(mockUser));
       
       setState({
@@ -127,18 +127,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         error: null,
       });
 
-      // Redirect based on user type
+      // ユーザータイプに基づいてリダイレクト
       if (userType === 'student') {
-        navigate('/student/profile');
+        navigate('/学生/プロフィール');
       } else if (userType === 'company') {
-        navigate('/company/profile');
+        navigate('/企業/プロフィール');
       }
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error('登録に失敗しました:', error);
       setState({
         ...state,
         isLoading: false,
-        error: 'Registration failed',
+        error: '登録に失敗しました',
       });
     }
   };
@@ -158,7 +158,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       setState({ ...state, isLoading: true });
       
-      // In a real app, this would be an API call
+      // 実際のアプリケーションではAPI呼び出しになります
       const updatedUser = { ...state.user, ...userData, updatedAt: new Date().toISOString() } as User;
       
       localStorage.setItem('user', JSON.stringify(updatedUser));
@@ -169,11 +169,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isLoading: false,
       });
     } catch (error) {
-      console.error('Failed to update user:', error);
+      console.error('ユーザー情報の更新に失敗しました:', error);
       setState({
         ...state,
         isLoading: false,
-        error: 'Failed to update user information',
+        error: 'ユーザー情報の更新に失敗しました',
       });
     }
   };
